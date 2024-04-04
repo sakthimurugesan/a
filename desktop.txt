@@ -1,0 +1,1833 @@
+
+Model.java
+package com.example;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name="Emp_details")
+public class Model {
+@Id
+@GeneratedValue(strategy=GenerationType.IDENTITY)
+private int id;
+Exp 1
+Employee Management System
+Date:
+private String name;
+private String email;
+private String department;
+private long salary;
+public int getId() {
+return id;
+}
+public void setId(int id) {
+this.id = id;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public String getEmail() {
+return email;
+}
+public void setEmail(String email) {
+this.email = email;
+}
+public String getDepartment() {
+return department;
+}
+public void setDepartment(String department) {
+this.department = department;
+}
+public long getSalary() {
+return salary;
+}
+public void setSalary(long salary) {
+this.salary = salary;
+}}
+Controller.java
+package com.example;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+public class Controller {
+@Autowired
+service s;
+@PostMapping("/add")
+public String add(@RequestBody Model m) {
+s.add(m);
+return "Added";
+}
+@GetMapping("/employees")
+public List<Model> n()
+{
+return s.get();
+}
+@GetMapping("/employees/{id}")
+public Optional<Model> getbyid(@PathVariable int id)
+{
+return s.getbyid(id);
+}
+@PutMapping("/update_emp/{id}")
+public ResponseEntity<Model> updateuser(@PathVariable int id,@RequestBody Model m)
+{
+m.setId(id);
+return s.updateuser(m);
+}
+@DeleteMapping("/delete_emp/{id}")
+public String deleteuser(@PathVariable int id)
+{
+return s.delete(id);
+} }
+service.java
+package com.example;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+@Service
+public class service {
+@Autowired
+Repo r;
+public String add(Model m) {
+r.save(m);
+return"Saved";
+}
+public List<Model> get()
+{
+return r.findAll();
+}
+public Optional<Model> getbyid(int id)
+{
+return r.findById(id);
+}
+public ResponseEntity<Model> updateuser(Model m)
+{
+r.save(m);
+return ResponseEntity.ok(m);
+}
+public String delete(int id)
+{
+r.deleteById(id);
+return "Successfully Deleted";
+}}
+Repo.java
+package com.example;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+@Repository
+public interface Repo extends JpaRepository<Model,Integer>{
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Model:
+package com.example.demo;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name="New")
+public class Modelclass {
+@Id
+@GeneratedValue(strategy=GenerationType.IDENTITY)
+private int id;
+private String title;
+Exp 2
+Book Library Management System
+Date:
+private String author;
+private int isbn;
+private int publishedYear;
+private String genre;
+public int getId() {
+return id;
+}
+public void setId(int id) {
+this.id = id;
+}
+public String getTitle() {
+return title;
+}
+public void setTitle(String title) {
+this.title = title;
+}
+public String getAuthor() {
+return author;
+}
+public void setAuthor(String author) {
+this.author = author;
+}
+public int getIsbn() {
+return isbn;
+}
+public void setIsbn(int isbn) {
+this.isbn = isbn;
+}
+public int getPublishedYear() {
+return publishedYear;
+}
+public void setPublishedYear(int publishedYear) {
+this.publishedYear = publishedYear;
+}
+public String getGenre() {
+return genre;
+}
+public void setGenre(String genre) {
+this.genre = genre;
+}
+}
+Controller:
+package com.example.demo;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+public class Controller {
+@Autowired
+service s;
+@GetMapping("/get")
+public List<Modelclass> getdata(){
+return s.getall();
+}
+@PostMapping("/save")
+public String save(@RequestBody Modelclass m) {
+s.add(m);
+return "added";
+}
+@PutMapping("/update/{id}")
+public String update(@PathVariable int id, @RequestBody Modelclass model) {
+s.update(id, model);
+return "Updated";
+}
+@DeleteMapping("/delete/{id}")
+public String delete(@PathVariable int id) {
+s.delete(id);
+return "Deleted";
+}
+}
+Repo:
+package com.example.demo;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface Repo extends JpaRepository<Modelclass,Integer> {
+}
+Service:
+package com.example.demo;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service
+public class service {
+@Autowired
+Repo r;
+public String add(Modelclass m) {
+r.save(m);
+return "Added";
+}
+public List<Modelclass> getall(){
+return r.findAll();
+}
+public void update(int id, Modelclass model) {
+if (r.existsById(id)) {
+model.setId(id);
+r.save(model);
+}
+}
+public void delete(int id) {
+r.deleteById(id);
+}
+}
+Application Property:
+spring.application.name=demo-2
+spring.datasource.url= jdbc:mysql://localhost:3306/lab
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database= mysql
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto= update
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+package com.gowtham.OneToOneMany;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+public class Controller_Staff {
+@Autowired
+Serve_Staff s;
+@PostMapping("/create")
+public String create(@RequestBody Model_Staff m) {
+Exp 3
+Staff Administration Platform
+Date:
+s.add(m);
+return "created sucessfully";
+}
+@GetMapping("/get")
+public List<Model_Staff> display(){
+return s.get_all();
+}
+@PutMapping("/update/{id}")
+public String update_user(@PathVariable int id, @RequestBody Model_Staff m){
+m.setEmp_id(id);
+return s.update_user(m);
+}
+@DeleteMapping("/delete/{id}")
+public String delete(@PathVariable int id) {
+s.delete(id);
+return "deleted Sucessfully";
+}
+}
+Model_Staff:
+package com.gowtham.OneToOneMany;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name="Staff_detils")
+public class Model_Staff {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private int emp_id;
+private String name;
+private String department;
+private Long Salary;
+public int getEmp_id() {
+return emp_id;
+}
+public void setEmp_id(int emp_id) {
+this.emp_id = emp_id;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public String getDepartment() {
+return department;
+}
+public void setDepartment(String department) {
+this.department = department;
+}
+public Long getSalary() {
+return Salary;
+}
+public void setSalary(Long salary) {
+Salary = salary;
+}
+}
+Repo_Admin:
+package com.gowtham.OneToOneMany;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface Repo_Admin extends JpaRepository<Model_Staff,Integer>{
+}
+Serve_Staff:
+package com.gowtham.OneToOneMany;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service
+public class Serve_Staff {
+@Autowired
+Repo_Admin r;
+public void add(Model_Staff m)
+{
+r.save(m);
+}
+public List<Model_Staff>get_all(){
+return r.findAll();
+}
+public void delete(int id) {
+r.deleteById(id);
+}
+public String update_user(Model_Staff m){
+r.save(m);
+return "Sucess";
+}
+}
+
+
+
+
+package com.gowtham.Staff_Auth;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import jakarta.transaction.Transactional;
+@RestController
+public class Controller_Auth {
+@Autowired
+Serve_Auth s;
+@PostMapping("/register")
+public String create(@RequestBody Model_Auth m) {
+s.add(m);
+return "created sucessfully";
+}
+@Transactional
+@GetMapping("/get/{user_name}/{password}")
+public String get_By(@PathVariable String user_name,@PathVariable String
+password ) {
+return s.get_By(user_name,password);
+}
+}
+Model_Auth:
+package com.gowtham.Staff_Auth;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name="Staff_Auth")
+public class Model_Auth {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private int id;
+private String user;
+private String pass;
+public int getId() {
+return id;
+}
+public void setId(int id) {
+this.id = id;
+}
+public String getUser() {
+return user;
+}
+public void setUser(String user) {
+this.user = user;
+}
+public String getPass() {
+return pass;
+}
+public void setPass(String pass) {
+this.pass= pass;
+}
+}
+Repo_Auth:
+package com.gowtham.Staff_Auth;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+public interface Repo_Auth extends JpaRepository<Model_Auth,Integer>{
+@Query("Select m from Model_Auth m Where m.user = :user_name")
+public Model_Auth get_By(String user_name);
+}
+Serve_Auth:
+package com.gowtham.Staff_Auth;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service
+public class Serve_Auth {
+@Autowired
+Repo_Auth r;
+public void add(Model_Auth m)
+{
+r.save(m);
+}
+public String get_By(String user_name,String password) {
+Model_Auth a=r.get_By(user_name);
+if(a==null) {
+return "user_name does not match";
+}
+else if(a.getPass().equals(password)) {
+return "Login";
+}
+else {
+return "Password is wrong";
+}
+}
+}
+POST:
+GET (IF USER NAME AND PASSWORD IS CORRECT):
+GET (IF USER NAME IS CORRECT AND PASSWORD IS WRONG):
+GET (IF USER NAME AND PASSWORD ALSO WRONG):
+DB :
+Result: Thus the Creation of an interactive web platform designed for staff management,
+enabling users to perform key actions such as creating, viewing, modifying, and removing staff
+profiles was successfully completed.
+Description :
+Create a simple product catalog system where users can add new products, view a list of products,
+update product details, and delete products. Each product should have attributes like ID, name,
+category, and price.
+Key Features:
+● CRUD operations for product management.
+● Use of JPA to query the database effectively.
+Product Model:
+Package com.example;
+Import jakarta.persistence.*;
+@Entity
+@Table(name=”Food”)
+Public class productModel{
+@Id
+@GeneratedValue(strategy=GenerationType.IDENTITY)
+Private int id;
+Private String name;
+Private String category;
+Private int price;
+Public productModel() {
+}
+Public int getId() {
+Return id;
+}
+Public void setId(int id) {
+This.id = id;
+}
+Exp 4
+Product Catalog System
+Date:
+Public String getName() {
+Return name;
+}
+Public void setName(String name) {
+This.name = name;
+}
+Public String getCategory() {
+Return category;
+}
+Public void setCategory(String category) {
+This.category = category;
+}
+Public int getPrice() {
+Return price;
+}
+Public void setPrice(int price) {
+This.price = price;
+}
+Public productModel(int id, String name, String category, int price) {
+Super();
+This.id = id;
+This.name = name;
+This.category = category;
+This.price = price;
+}
+}
+Product Controller:
+Package com.example;
+Import java.util.List;
+Import java.util.Optional;
+Import org.springframework.beans.factory.annotation.Autowired;
+Import org.springframework.data.domain.Page;
+Import org.springframework.http.ResponseEntity;
+Import org.springframework.web.bind.annotation.GetMapping;
+Import org.springframework.web.bind.annotation.PathVariable;
+Import org.springframework.web.bind.annotation.PostMapping;
+Import org.springframework.web.bind.annotation.PutMapping;
+Import org.springframework.web.bind.annotation.RequestBody;
+Import org.springframework.web.bind.annotation.RestController;
+Import org.springframework.web.bind.annotation.*;
+@RestController
+@CrossOrigin(http://localhost:3000)
+Public class productController{
+@Autowired
+Public productService ser;
+@PostMapping(“/create”)
+Public String create(@RequestBody productModel m)
+{
+Ser.add(m);
+Return “added”;
+}
+@GetMapping(“/get”)
+Public List<productModel> get()
+{
+Return ser.get();
+}
+@GetMapping(“/getbyid/{id}”)
+Public Optional<productModel> getById(@PathVariable int id){
+Return ser.getid(id);
+}
+@PutMapping(“/update/{id}”)
+Public ResponseEntity<productModel> update(@RequestBody productModel
+m,@PathVariable int id){
+m.setId(id);
+return ResponseEntity.ok(ser.update(m));
+}
+@GetMapping(“/page”)
+Public Page<productModel> getAll(@RequestParam int page,@RequestParam int size)
+{
+Return ser.getPage(page,size);
+}
+@GetMapping(“/sort”)
+Public List<productModel> getsort(){
+List<productModel> sortedList = ser.Sorting(); // Assuming sort() method is
+implemented in your service
+Return sortedList;
+}
+@GetMapping(“update/{id}/{name}”)
+Public void updater(@PathVariable String name,@PathVariable int id)
+{
+Ser.update(name,id);
+}
+@GetMapping(“delete/{id}”)
+Public void deleter(@PathVariable int id)
+{
+Ser.delete(id);
+}
+}
+Product Repo:
+Package com.example;
+Import org.springframework.data.jpa.repository.JpaRepository;
+Import org.springframework.data.jpa.repository.Modifying;
+Import org.springframework.data.jpa.repository.Query;
+Import org.springframework.data.repository.query.Param;
+Import org.springframework.transaction.annotation.Transactional;
+Public interface productRepo extends JpaRepository<productModel, Integer> {
+@Modifying
+@Transactional
+@Query(value = “update productModel m set m.name = :name where m.id = :id”)
+Void updater(@Param(“name”) String name, @Param(“id”) int id);
+@Modifying
+@Transactional
+@Query(value = “delete from productModel m where m.id = :id”)
+Void deleter(@Param(“id”) int id);
+}
+Product Service :
+Package com.example;
+Import java.util.List;
+Import java.util.Optional;
+Import org.springframework.beans.factory.annotation.Autowired;
+Import org.springframework.data.domain.Page;
+Import org.springframework.data.domain.PageRequest;
+Import org.springframework.data.domain.Sort;
+Import org.springframework.stereotype.Service;
+@Service
+Public class productService {
+@Autowired
+Public productRepo repository;
+Public List<productModel> Sorting() {
+Return repository.findAll(Sort.by(Sort.Direction.ASC, “price”));
+}
+Public Page<productModel> getPage(int page, int size) {
+PageRequest p = PageRequest.of(page, size);
+Return repository.findAll(p);
+}
+Public String add(productModel m) {
+Repository.save(m);
+Return “Saved”;
+}
+Public List<productModel> get() {
+Return repository.findAll();
+}
+Public Optional<productModel> getid(int id) {
+Return repository.findById(id);
+}
+Public productModel update(productModel m) {
+Return repository.save(m);
+}
+Public void update(String name,int id){
+Repository.updater(name, id);
+} Public void delete(int id){
+Repository.deleter(id);
+}
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Model.java
+package com.example;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name="onlineshop")
+public class Model {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+private String name;
+Exp 5
+Online Recipe Repository
+Date:
+private String chef;
+private int yearOfCreation;
+private String cuisineType;
+public Long getId() {
+return id;
+}
+public void setId(Long id) {
+this.id = id;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public String getChef() {
+return chef;
+}
+public void setChef(String chef) {
+this.chef = chef;
+}
+public int getYearOfCreation() {
+return yearOfCreation;
+}
+public void setYearOfCreation(int yearOfCreation) {
+this.yearOfCreation = yearOfCreation;
+}
+public String getCuisineType() {
+return cuisineType;
+}
+public void setCuisineType(String cuisineType) {
+this.cuisineType = cuisineType;
+}
+}
+Repo.java
+package com.example;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface Repo extends JpaRepository<Model, Long> {
+}
+Service.java
+package com.example;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+@Service
+public class service {
+@Autowired
+private Repo recipeRepository;
+public List<Model> getAllRecipes() {
+return recipeRepository.findAll();
+}
+public Optional<Model> getRecipeById(Long id) {
+return recipeRepository.findById(id);
+}
+public Model addRecipe(Model recipe) {
+return recipeRepository.save(recipe);
+}
+public Model updateRecipe(Long id, Model updatedRecipe) {
+updatedRecipe.setId(id); // Ensure the correct ID is set
+return recipeRepository.save(updatedRecipe);
+}
+public void deleteRecipe(Long id) {
+recipeRepository.deleteById(id);
+}
+}
+Controller.java
+package com.example;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Optional;
+@RestController
+@RequestMapping("/recipes")
+public class Controller {
+@Autowired
+private service recipeService;
+@GetMapping("/get")
+public List<Model> getAllRecipes() {
+return recipeService.getAllRecipes();
+}
+@GetMapping("/get/{id}")
+public ResponseEntity<Model> getRecipeById(@PathVariable Long id) {
+Optional<Model> recipe = recipeService.getRecipeById(id);
+return recipe.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+}
+@PostMapping("/post")
+public ResponseEntity<Model> addRecipe(@RequestBody Model recipe) {
+Model newRecipe = recipeService.addRecipe(recipe);
+return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
+}
+@PutMapping("/put/{id}")
+public ResponseEntity<Model> updateRecipe(@PathVariable Long id, @RequestBody
+Model recipe) {
+Model updatedRecipe = recipeService.updateRecipe(id, recipe);
+return new ResponseEntity<>(updatedRecipe, HttpStatus.OK);
+}
+@DeleteMapping("/delete/{id}")
+public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
+recipeService.deleteRecipe(id);
+return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+}
+}
+Application.properties
+spring.application.name=Lab5
+spring.datasource.url=jdbc:mysql://localhost:3306/suriya
+spring.datasource.username = root
+spring.datasource.password = harini05#
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package com.example.Exercise6;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name="Customer")
+public class Model {
+@Id
+Exp 6
+Customer Relationship Management Tool
+Date:
+@GeneratedValue(strategy=GenerationType.IDENTITY)
+private int id;
+private String firstname;
+private String lastname;
+private String email;
+private int loyaltyPoints;
+private String address;
+public int getId() {
+return id;
+}
+public void setId(int id) {
+this.id = id;
+}
+public String getFirstname() {
+return firstname;
+}
+public void setFirstname(String firstname) {
+this.firstname = firstname;
+}
+public String getLastname() {
+return lastname;
+}
+public void setLastname(String lastname) {
+this.lastname = lastname;
+}
+public String getEmail() {
+return email;
+}
+public void setEmail(String email) {
+this.email = email;
+}
+public int getLoyaltyPoints() {
+return loyaltyPoints;
+}
+public void setLoyaltyPoints(int loyaltyPoints) {
+this.loyaltyPoints = loyaltyPoints;
+}
+public String getAddress() {
+return address;
+}
+public void setAddress(String address) {
+this.address = address;
+}
+}
+Controller class:
+package com.example.Exercise6;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+@RequestMapping("/customers")
+public class Controller {
+@Autowired
+private serv customerService;
+@PostMapping("/create")
+public ResponseEntity<Model> createCustomer(@RequestBody Model customer) {
+Model createdCustomer = customerService.createCustomer(customer);
+return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
+}
+@GetMapping("/get")
+public ResponseEntity<List<Model>> getAllCustomers() {
+List<Model> customers = customerService.getAllCustomers();
+return new ResponseEntity<>(customers, HttpStatus.OK);
+}
+@GetMapping("/{id}")
+public ResponseEntity<Model> getCustomerById(@PathVariable int id) {
+Model customer = customerService.getCustomerById(id);
+if (customer != null) {
+return new ResponseEntity<>(customer, HttpStatus.OK);
+} else {
+return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+}
+}
+@PutMapping("/{id}")
+public ResponseEntity<Model> updateCustomer(@PathVariable int id, @RequestBody Model
+updatedCustomer) {
+Model customer = customerService.updateCustomer(id, updatedCustomer);
+if (customer != null) {
+return new ResponseEntity<>(customer, HttpStatus.OK);
+} else {
+return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+}
+}
+@DeleteMapping("/{id}")
+public ResponseEntity<Void> deleteCustomer(@PathVariable int id) {
+customerService.deleteCustomer(id);
+return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+}
+}
+Service Class:
+package com.example.Exercise6;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service
+public class serv {
+@Autowired
+Repo customerRepo;
+public Model createCustomer(Model customer) {
+return customerRepo.save(customer);
+}
+public List<Model> getAllCustomers(){
+return customerRepo.findAll();
+}
+public Model getCustomerById(int id) {
+return customerRepo.findById(id).orElse(null);
+}
+public Model updateCustomer(int id, Model updatedCustomer) {
+Model existingCustomer = customerRepo.findById(id).orElseGet(null);
+if(existingCustomer != null) {
+return customerRepo.save(existingCustomer);
+}
+return null;
+}
+public void deleteCustomer(int id) {
+customerRepo.deleteById(id);
+}
+}
+Repo Interface:
+package com.example.Exercise6;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+@Repository
+public interface Repo extends JpaRepository<Model,Integer>{
+}
+application.properties:
+spring.application.name=Exercise6
+spring.datasource.url= jdbc:mysql://localhost:3306/ex6
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database= mysql
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto= update
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Club.java
+package com.example;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+@Entity
+public class Club {
+@Id
+Exp 7
+Campus Club Management System
+Date:
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+private String name;
+public Long getId() {
+return id;
+}
+public void setId(Long id) {
+this.id = id;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+}
+//ClubController.java
+package com.example;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+@RequestMapping("/clubs")
+public class ClubController {
+@Autowired
+private ClubRepository clubRepository;
+@GetMapping
+public List<Club> getAllClubs() {
+return clubRepository.findAll();
+}
+@PostMapping
+public Club createClub(@RequestBody Club club) {
+return clubRepository.save(club);
+}
+@PutMapping("/{id}")
+public ResponseEntity<Club> updateClub(@PathVariable Long id,
+@RequestBody Club clubDetails) {
+Optional<Club> optionalClub = clubRepository.findById(id);
+if (!optionalClub.isPresent()) {
+return ResponseEntity.notFound().build();
+}
+Club club = optionalClub.get();
+club.setName(clubDetails.getName());
+Club updatedClub = clubRepository.save(club);
+return ResponseEntity.ok(updatedClub);
+}
+@DeleteMapping("/{id}")
+public ResponseEntity<Void> deleteClub(@PathVariable Long id) {
+Optional<Club> optionalClub = clubRepository.findById(id);
+if (!optionalClub.isPresent()) {
+return ResponseEntity.notFound().build();
+}
+clubRepository.deleteById(id);
+return ResponseEntity.noContent().build();
+}
+}
+//ClubRepository.java
+package com.example;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface ClubRepository extends JpaRepository<Club, Long> {
+}
+//Member.java
+package com.example;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+@Entity
+public class Member {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+private String name;
+private String email;
+@ManyToOne
+@JoinColumn(name = "club_id", nullable = false)
+private Club club;
+public Long getId() {
+return id;
+}
+public void setId(Long id) {
+this.id = id;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public String getEmail() {
+return email;
+}
+public void setEmail(String email) {
+this.email = email;
+}
+public Club getClub() {
+return club;
+}
+public void setClub(Club club) {
+this.club = club;
+}
+}
+//MemberController.java
+package com.example;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+@RequestMapping("/members")
+public class MemberController {
+@Autowired
+private MemberRepository memberRepository;
+@GetMapping
+public List<Member> getAllMembers() {
+return memberRepository.findAll();
+}
+@GetMapping("/{clubId}")
+public List<Member> getMembersByClub(@PathVariable Long clubId) {
+return memberRepository.findByClubId(clubId);
+}
+@PostMapping
+public Member createMember(@RequestBody Member member) {
+return memberRepository.save(member);
+}
+@PutMapping("/{id}")
+public ResponseEntity<Member> updateMember(@PathVariable Long id,
+@RequestBody Member memberDetails) {
+Optional<Member> optionalMember = memberRepository.findById(id);
+if (!optionalMember.isPresent()) {
+return ResponseEntity.notFound().build();
+}
+Member member = optionalMember.get();
+member.setName(memberDetails.getName());
+member.setEmail(memberDetails.getEmail());
+Member updatedMember = memberRepository.save(member);
+return ResponseEntity.ok(updatedMember);
+}
+@DeleteMapping("/{id}")
+public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
+Optional<Member> optionalMember = memberRepository.findById(id);
+if (!optionalMember.isPresent()) {
+return ResponseEntity.notFound().build();
+}
+memberRepository.deleteById(id);
+return ResponseEntity.noContent().build();
+}
+}
+//MemberRepository.java
+package com.example;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface MemberRepository extends JpaRepository<Member, Long> {
+List<Member> findByClubId(Long clubId);
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MODEL CLASS:
+1)Patient.java
+package com.example.PatientManagementSystem;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+Exp 8
+Patient and Appointment Management System
+Date:
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+@Entity
+public class Patient {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long patientId;
+private String name;
+private String dateOfBirth;
+private String contactNumber;
+private String issue;
+public Long getPatientId() {
+return patientId;
+}
+public void setPatientId(Long patientId) {
+this.patientId = patientId;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public String getDateOfBirth() {
+return dateOfBirth;
+}
+public void setDateOfBirth(String dateOfBirth) {
+this.dateOfBirth = dateOfBirth;
+}
+public String getContactNumber() {
+return contactNumber;
+}
+public void setContactNumber(String contactNumber) {
+this.contactNumber = contactNumber;
+}
+public String getIssue() {
+return issue;
+}
+public void setIssue(String issue) {
+this.issue = issue;
+}
+}
+2)Doctor.java
+package com.example.PatientManagementSystem;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+@Entity
+public class Doctor {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long doctorId;
+private String name;
+private String specialty;
+// Getters and setters
+public Long getDoctorId() {
+return doctorId;
+}
+public void setDoctorId(Long doctorId) {
+this.doctorId = doctorId;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public String getSpecialty() {
+return specialty;
+}
+public void setSpecialty(String specialty) {
+this.specialty = specialty;
+}
+}
+3)Appointment.java
+package com.example.PatientManagementSystem;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+@Entity
+public class Appointment {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long appointmentId;
+private String date;
+private String time;
+@ManyToOne
+@JoinColumn(name = "patient_id")
+private Patient patient;
+@ManyToOne
+@JoinColumn(name = "doctor_id")
+private Doctor doctor;
+public Long getAppointmentId() {
+return appointmentId;
+}
+public void setAppointmentId(Long appointmentId) {
+this.appointmentId = appointmentId;
+}
+public String getDate() {
+return date;
+}
+public void setDate(String date) {
+this.date = date;
+}
+public String getTime() {
+return time;
+}
+public void setTime(String time) {
+this.time = time;
+}
+public Patient getPatient() {
+return patient;
+}
+public void setPatient(Patient patient) {
+this.patient = patient;
+}
+public Doctor getDoctor() {
+return doctor;
+}
+public void setDoctor(Doctor doctor) {
+this.doctor = doctor;
+}
+}
+SERVICE
+1)PatientService.java
+package com.example.PatientManagementSystem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+@Service
+public class PatientService {
+@Autowired
+private PatientRepository patientRepository;
+public Patient createPatient(Patient patient) {
+return patientRepository.save(patient);
+}
+public List<Patient> getAllPatients() {
+return patientRepository.findAll();
+}
+public Patient getPatientById(Long id) {
+return patientRepository.findById(id).orElse(null);
+}
+public Patient updatePatient(Long id, Patient newPatientData) {
+Patient existingPatient = patientRepository.findById(id).orElse(null);
+if (existingPatient != null) {
+existingPatient.setName(newPatientData.getName());
+existingPatient.setDateOfBirth(newPatientData.getDateOfBirth());
+existingPatient.setContactNumber(newPatientData.getContactNumber());
+existingPatient.setIssue(newPatientData.getIssue());
+return patientRepository.save(existingPatient);
+}
+return null;
+}
+public void deletePatient(Long id) {
+patientRepository.deleteById(id);
+}
+}
+2)DoctorService.java
+package com.example.PatientManagementSystem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+@Service
+public class DoctorService {
+@Autowired
+private DoctorRepository doctorRepository;
+public Doctor createDoctor(Doctor doctor) {
+return doctorRepository.save(doctor);
+}
+public List<Doctor> getAllDoctors() {
+return doctorRepository.findAll();
+}
+public Doctor getDoctorById(Long id) {
+return doctorRepository.findById(id).orElse(null);
+}
+public Doctor updateDoctor(Long id, Doctor newDoctorData) {
+Doctor existingDoctor = doctorRepository.findById(id).orElse(null);
+if (existingDoctor != null) {
+existingDoctor.setName(newDoctorData.getName());
+existingDoctor.setSpecialty(newDoctorData.getSpecialty());
+return doctorRepository.save(existingDoctor);
+}
+return null;
+}
+public void deleteDoctor(Long id) {
+doctorRepository.deleteById(id);
+}
+}
+3)AppointmentService.java
+package com.example.PatientManagementSystem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+@Service
+public class AppointmentService {
+@Autowired
+private AppointmentRepository appointmentRepository;
+public Appointment scheduleAppointment(Appointment appointment) {
+return appointmentRepository.save(appointment);
+}
+public List<Appointment> getAllAppointments() {
+return appointmentRepository.findAll();
+}
+public Appointment getAppointmentById(Long id) {
+Optional<Appointment> appointmentOptional = appointmentRepository.findById(id);
+return appointmentOptional.orElse(null);
+}
+public Appointment rescheduleAppointment(Long id, String newDate, String newTime) {
+Optional<Appointment> appointmentOptional = appointmentRepository.findById(id);
+if (appointmentOptional.isPresent()) {
+Appointment existingAppointment = appointmentOptional.get();
+existingAppointment.setDate(newDate);
+existingAppointment.setTime(newTime);
+return appointmentRepository.save(existingAppointment);
+}
+return null; // Or throw an exception indicating appointment not found
+}
+public void cancelAppointment(Long id) {
+appointmentRepository.deleteById(id);
+}
+}
+REPOSITORY
+1)PateintRepository.java
+package com.example.PatientManagementSystem;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+@Repository
+public interface PatientRepository extends JpaRepository<Patient, Long> {
+}
+2)DoctorRepository.java
+package com.example.PatientManagementSystem;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+@Repository
+public interface DoctorRepository extends JpaRepository<Doctor, Long> {
+}
+3)AppointmentRepository.java
+package com.example.PatientManagementSystem;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+@Repository
+public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
+}
+CONTROLLER
+1)PatientController.java
+package com.example.PatientManagementSystem;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+@RestController
+@RequestMapping("/patient")
+public class PatientController {
+@Autowired
+private PatientService patientService;
+@PostMapping
+public Patient createPatient(@RequestBody Patient patient) {
+return patientService.createPatient(patient);
+}
+@GetMapping
+public List<Patient> getAllPatients() {
+return patientService.getAllPatients();
+}
+@GetMapping("/{id}")
+public Patient getPatientById(@PathVariable Long id) {
+return patientService.getPatientById(id);
+}
+@PutMapping("/{id}")
+public Patient updatePatient(@PathVariable Long id, @RequestBody Patient newPatientData) {
+return patientService.updatePatient(id, newPatientData);
+}
+@DeleteMapping("/{id}")
+public void deletePatient(@PathVariable Long id) {
+patientService.deletePatient(id);
+}
+}
+2)DoctorController.java
+package com.example.PatientManagementSystem;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+@RestController
+@RequestMapping("/doctors")
+public class DoctorController {
+@Autowired
+private DoctorService doctorService;
+@PostMapping
+public Doctor createDoctor(@RequestBody Doctor doctor) {
+return doctorService.createDoctor(doctor);
+}
+@GetMapping
+public List<Doctor> getAllDoctors() {
+return doctorService.getAllDoctors();
+}
+@GetMapping("/{id}")
+public Doctor getDoctorById(@PathVariable Long id) {
+return doctorService.getDoctorById(id);
+}
+@PutMapping("/{id}")
+public Doctor updateDoctor(@PathVariable Long id, @RequestBody Doctor newDoctorData) {
+return doctorService.updateDoctor(id, newDoctorData);
+}
+@DeleteMapping("/{id}")
+public void deleteDoctor(@PathVariable Long id) {
+doctorService.deleteDoctor(id);
+}
+}
+3)AppointmentController.java
+package com.example.PatientManagementSystem;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+@RestController
+@RequestMapping("/appointments")
+public class AppointmentController {
+@Autowired
+private AppointmentService appointmentService;
+@PostMapping
+public Appointment scheduleAppointment(@RequestBody Appointment appointment) {
+return appointmentService.scheduleAppointment(appointment);
+}
+@GetMapping
+public List<Appointment> getAllAppointments() {
+return appointmentService.getAllAppointments();
+}
+@GetMapping("/{id}")
+public Appointment getAppointmentById(@PathVariable Long id) {
+return appointmentService.getAppointmentById(id);
+}
+@PutMapping("/{id}/reschedule")
+public Appointment rescheduleAppointment(@PathVariable Long id, @RequestParam String
+newDate,
+@RequestParam String newTime) {
+return appointmentService.rescheduleAppointment(id, newDate, newTime);
+}
+@DeleteMapping("/{id}")
+public void cancelAppointment(@PathVariable Long id) {
+appointmentService.cancelAppointment(id);
+}
+}
+APPLICATION PROPERTY
+spring.application.name=PatientManagementSystem
+spring.datasource.url=jdbc:mysql://localhost:3306/sample9
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database=mysql
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+User.java
+package com.example.project9;
+import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+Exp 9
+Managing User Entities with JPA
+Date:
+import static jakarta.persistence.TemporalType.TIMESTAMP;
+@Entity
+@Table(name="projectNine")
+public class User {
+@Id
+@Column(name = "id")
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private int id;
+public User() {
+}
+public int getId() {
+return id;
+}
+public void setId(int id) {
+this.id = id;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public String getEmail() {
+return email;
+}
+public void setEmail(String email) {
+this.email = email;
+}
+public int getAge() {
+return age;
+}
+public void setAge(int age) {
+this.age = age;
+}
+public LocalDateTime getCreatedAt() {
+return createdAt;
+}
+public void setCreatedAt(LocalDateTime createdAt) {
+this.createdAt = createdAt;
+}
+public LocalDateTime getUpdatedAt() {
+return updatedAt;
+}
+public void setUpdatedAt(LocalDateTime updatedAt) {
+this.updatedAt = updatedAt;
+}
+public String getStatus() {
+return status;
+}
+public void setStatus(String status) {
+this.status = status;
+}
+public User(int id, String name, String email, int age, LocalDateTime createdAt,
+LocalDateTime updatedAt, String status) {
+this.id = id;
+this.name = name;
+this.email = email;
+this.age = age;
+this.createdAt = createdAt;
+this.updatedAt = updatedAt;
+this.status = status;
+}
+@Column(name = "name")
+private String name;
+@Column(name = "email")
+private String email;
+@Column(name = "age")
+private int age;
+@CreatedDate
+@Temporal(TIMESTAMP)
+@Column(name = "createdAt")
+protected LocalDateTime createdAt;
+@LastModifiedDate
+@Temporal(TIMESTAMP)
+@Column(name = "updatedAt")
+private LocalDateTime updatedAt;
+@Column(name = "status")
+private String status="active";
+@PrePersist
+protected void onCreate() {
+createdAt = LocalDateTime.now();
+updatedAt = LocalDateTime.now();
+}
+@PreUpdate
+protected void onUpdate() {
+updatedAt = LocalDateTime.now();
+}
+}
+Contr.java
+package com.example.project9;
+import jakarta.persistence.GeneratedValue;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+@RestController
+public class Contr {
+@Autowired
+UserRepo repo;
+@GetMapping("/alluser")
+public List<User> getAllUser()
+{
+return repo.findAll();
+}
+@GetMapping("/user/{id}")
+public User getUser(@PathVariable("id") int id)
+{
+return repo.findById(id).orElse(new User());
+}
+@DeleteMapping("/delete/{id}")
+public String deleteUser(@PathVariable("id") int id)
+{
+User u= repo.findById(id).orElse(new User());
+repo.delete(u);
+return "User deleted";
+}
+@PostMapping("/saveuser")
+public String adduser(@RequestBody User user)
+{
+repo.save(user);
+return "User added";
+}
+@PutMapping("/update/{id}")
+public String updateUser(@PathVariable("id") int id,@RequestBody User user)
+{
+User u= repo.findById(id).orElse(new User());
+u.setName(user.getName());
+u.setAge(user.getAge());
+u.setStatus(user.getStatus());
+u.setEmail(user.getEmail());
+repo.save(u);
+return "User updated";
+}
+}
+UserRepo.java
+package com.example.project9;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RestController;
+@Repository
+public interface UserRepo extends JpaRepository<User,Integer> {
+}
+OUTPUT:
+POST
+GET
+PUT
+DELETE
+Result :
+Thus the simple CRUD application using Spring framework, Maven, and MySQL as a backend
+database was successfully implemented.
+Description:
+Design and implement a basic web application for a vehicle dealership using the Spring
+framework, Maven, and MySQL. Utilize JPA for performing CRUD operations on 'Vehicle'
+entities. The application should enable the following capabilities:
+● Register a new vehicle with details like make, model, VIN (Vehicle Identification
+Number), and year of manufacture.
+● Display a catalog of all vehicles in the dealership's inventory.
+● Provide a feature to search for vehicles based on make or model.
+● Allow for the modification of vehicle details.
+● Facilitate the removal of a vehicle from the inventory.
+Vehicle Entity Fields:
+● id: A unique identifier for each vehicle in the inventory. This could be an autogenerated
+field .
+● make: The manufacturer of the vehicle. This is a string representing the brand.
+● model: The specific model of the vehicle. This is a string.
+● vin: The Vehicle Identification Number, which is a unique code used to identify
+individual motor vehicles. This is a string.
+● yearOfManufacture: The year the vehicle was manufactured. This could be
+represented by an integer.
+● color: The color of the vehicle. This detail can be important for buyers and is a string.
+● price: The sale price of the vehicle. This could be a decimal to accommodate cents,
+useful for pricing.
+MODEL:
+package com.example.Vehicle;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+Exp 10
+Vehicle Dealership Inventory Management System
+Date:
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name = "vehicles")
+public class Vehicle {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+private String make;
+private String model;
+private String vin;
+private int yearOfManufacture;
+private String color;
+private double price;
+public Long getId() {
+return id;
+}
+public void setId(Long id) {
+this.id = id;
+}
+public String getMake() {
+return make;
+}
+public void setMake(String make) {
+this.make = make;
+}
+public String getModel() {
+return model;
+}
+public void setModel(String model) {
+this.model = model;
+}
+public String getVin() {
+return vin;
+}
+public void setVin(String vin) {
+this.vin = vin;
+}
+public int getYearOfManufacture() {
+return yearOfManufacture;
+}
+public void setYearOfManufacture(int yearOfManufacture) {
+this.yearOfManufacture = yearOfManufacture;
+}
+public String getColor() {
+return color;
+}
+public void setColor(String color) {
+this.color = color;
+}
+public double getPrice() {
+return price;
+}
+public void setPrice(double price) {
+this.price = price;
+}
+}
+CONTROLLER:
+package com.example.Vehicle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+@RestController
+@RequestMapping("/vehicles")
+@CrossOrigin(origins = "http://localhost:3000")
+public class VehicleController {
+@Autowired
+private VehicleService vehicleService;
+@GetMapping
+public List<Vehicle> getAllVehicles() {
+return vehicleService.getAllVehicles();
+}
+@GetMapping("/{id}")
+public Vehicle getVehicleById(@PathVariable Long id) {
+return vehicleService.getVehicleById(id);
+}
+@PostMapping
+public Vehicle saveVehicle(@RequestBody Vehicle vehicle) {
+return vehicleService.saveVehicle(vehicle);
+}
+@PutMapping("/{id}")
+public Vehicle updateVehicle(@PathVariable Long id, @RequestBody Vehicle
+updatedVehicle) {
+return vehicleService.updateVehicle(id, updatedVehicle);
+}
+@DeleteMapping("/{id}")
+public void deleteVehicleById(@PathVariable Long id) {
+vehicleService.deleteVehicleById(id);
+}
+}
+REPO:
+package com.example.Vehicle;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface VehicleRepository extends JpaRepository<Vehicle, Long>{
+}
+SERVICE
+package com.example.Vehicle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+@Service
+public class VehicleService {
+@Autowired
+private VehicleRepository vehicleRepository;
+public List<Vehicle> getAllVehicles() {
+return vehicleRepository.findAll();
+}
+public Vehicle saveVehicle(Vehicle vehicle) {
+return vehicleRepository.save(vehicle);
+}
+public Vehicle getVehicleById(Long id) {
+return vehicleRepository.findById(id).orElse(null);
+}
+public void deleteVehicleById(Long id) {
+vehicleRepository.deleteById(id);
+}
+public Vehicle updateVehicle(Long id, Vehicle updatedVehicle) {
+Optional<Vehicle> optionalVehicle = vehicleRepository.findById(id);
+if (optionalVehicle.isPresent()) {
+Vehicle existingVehicle = optionalVehicle.get();
+existingVehicle.setMake(updatedVehicle.getMake());
+existingVehicle.setModel(updatedVehicle.getModel());
+existingVehicle.setColor(updatedVehicle.getColor());
+existingVehicle.setVin(updatedVehicle.getVin());
+existingVehicle.setYearOfManufacture(updatedVehicle.getYearOfManufacture());
+return vehicleRepository.save(existingVehicle);
+} else {
+return null; // Or throw an exception, depending on your error handling strategy
+}
+}
+}
+APPLICATION-PROPERTIES:
+spring.application.name=Vehicle
+spring.datasource.url= jdbc:mysql://localhost:3306/new
+spring.datasource.username=root
+spring.datasource.password=kasthuri@1102004
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database= mysql
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto= update
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
